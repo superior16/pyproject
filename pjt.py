@@ -181,7 +181,7 @@ class progm(object):
         cur= conectar.cursor()
         cur.execute('INSERT INTO dadosmaq VALUES(?,?,?)',(nome_maq.decode("latin1"),funcao_maq.decode("latin1"),n_m_maq.decode("latin1")))
         conectar.commit()
-        self.window6.hide_all()
+        self.window7.hide_all()
 
     def save_cn_maq(self,widget):
         nome_maq= self.entmaq.get_chars(0,-1)
@@ -233,18 +233,27 @@ class progm(object):
 
     def atum_func(self,widget):
         self.window10.show_all()
+        self.atu_func_pesq.set_text("")
+        self.atu_func_cargo.set_text("")
 
     def dec_func(self,widget):
         self.window8.show_all()
+        self.dec_func.set_text("")
 
     def dec_mqna(self,widget):
         self.window9.show_all()
+        self.dec_maq.set_text("")
 
     def valor_bruto(self,widget):
         self.window11.show_all()
+        self.valor_bruto_valor.set_text("")
+        self.valor_bruto_mes.set_text("")
 
     def despesas(self,widget):
         self.window12.show_all()
+        self.desp_valor.set_text("")
+        self.desp_mes.set_text("")
+
 
     def func (self,widget,):
         self.window2.show_all()
@@ -296,9 +305,15 @@ class progm(object):
 
     def cad_func (self,widget,):
         self.window6.show_all()
+        self.entfunc.set_text("")
+        self.entfunc2.set_text("")
+        self.entfunc3.set_text("")
 
     def cad_mqna (self,widget,):
         self.window7.show_all()
+        self.entmaq.set_text("")
+        self.entmaq2.set_text("")
+        self.entmaq3.set_text("")
 
 p=progm()
 gtk.main()
