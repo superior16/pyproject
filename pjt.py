@@ -18,10 +18,23 @@ class progm(object):
         self.cur.execute(queryCriar)
         self.conectar.commit()
 
-        queryCriar = """CREATE TABLE IF NOT EXISTS dadosmaq (nome text, funcao text, numero_maquina text)"""
+        queryCriar2 = """CREATE TABLE IF NOT EXISTS dadosbruto (valor text, mes text)"""
         self.conectar = sqlite3.connect("dadosfunc.db")
         self.cur= self.conectar.cursor()
-        self.cur.execute(queryCriar)
+        self.cur.execute(queryCriar2)
+        self.conectar.commit()
+
+        queryCriar3 = """CREATE TABLE IF NOT EXISTS dadosdesp (valor text, mes text)"""
+        self.conectar = sqlite3.connect("dadosfunc.db")
+        self.cur= self.conectar.cursor()
+        self.cur.execute(queryCriar3)
+        self.conectar.commit()
+
+
+        queryCriar4 = """CREATE TABLE IF NOT EXISTS dadosmaq (nome text, funcao text, numero_maquina text)"""
+        self.conectar = sqlite3.connect("dadosfunc.db")
+        self.cur= self.conectar.cursor()
+        self.cur.execute(queryCriar4)
         self.conectar.commit()
 
         builder= gtk.Builder()
@@ -143,7 +156,7 @@ class progm(object):
         self.but33.connect("clicked",self.hide_event10,)
 
         self.but34= builder.get_object("button34")
-        self.but34.connect("clicked",self.add_despesa,)
+        self.but34.connect("clicked",self.add_despesas,)
 
         self.but35= builder.get_object("button35")
         self.but35.connect("clicked",self.hide_event11,)
@@ -163,15 +176,46 @@ class progm(object):
         self.desp_valor= builder.get_object("entry13")
         self.desp_mes= builder.get_object("entry14")
 
+        self.label_name_func= builder.get_object("label17")
+        self.label_carg_func= builder.get_object("label18")
+        self.label_n_func= builder.get_object("label19")
+        self.label_name_maq= builder.get_object("label23")
+        self.label_func_maq= builder.get_object("label25")
+        self.label_n_maq= builder.get_object("label27")
+
+
     def ent_func (self,widget):
         nome_func= self.entfunc.get_chars(0,-1)
         cargo_func= self.entfunc2.get_chars(0,-1)
         n_c_t_func= self.entfunc3.get_chars(0,-1)
         conectar = sqlite3.connect("dadosfunc.db")
         cur= conectar.cursor()
-        cur.execute('INSERT INTO dadosfunc VALUES(?,?,?)',(nome_func.decode("latin1"),cargo_func.decode("latin1"),n_c_t_func.decode("latin1")))
+        cur.execute('INSERT INTO dadosfunc VALUES(?,?,?)', (nome_func.decode("latin1"), cargo_func.decode("latin1"),n_c_t_func.decode("latin1")))
         conectar.commit()
         self.window6.hide_all()
+
+    def add_bruto (self,widget):
+        valor_bruto= self.valor_bruto_valor.get_chars(0,-1)
+        valor_bruto_mes= self.valor_bruto_mes.get_chars(0,-1)
+        conectar = sqlite3.connect("dadosfunc.db")
+        cur= conectar.cursor()
+        cur.execute('INSERT INTO dadosbruto VALUES(?,?)',(valor_bruto.decode("latin1"),valor_bruto_mes.decode("latin1")))
+        conectar.commit()
+        self.valor_bruto_mes.set_text("")
+        self.valor_bruto_valor.set_text("")
+
+    def add_despesas (self,widget):
+        valor_despesas= self.desp_valor.get_chars(0,-1)
+        valor_despesas_mes= self.desp_mes.get_chars(0,-1)
+        conectar = sqlite3.connect("dadosfunc.db")
+        cur= conectar.cursor()
+        cur.execute('INSERT INTO dadosdesp VALUES(?,?)',(valor_despesas.decode("latin1"),valor_despesas_mes.decode("latin1")))
+        conectar.commit()
+        self.desp_mes.set_text("")
+        self.desp_valor.set_text("")
+
+
+
 
     def ent_maq(self,widget):
         nome_maq= self.entmaq.get_chars(0,-1)
@@ -181,7 +225,7 @@ class progm(object):
         cur= conectar.cursor()
         cur.execute('INSERT INTO dadosmaq VALUES(?,?,?)',(nome_maq.decode("latin1"),funcao_maq.decode("latin1"),n_m_maq.decode("latin1")))
         conectar.commit()
-        self.window6.hide_all()
+        self.window7.hide_all()
 
     def save_cn_maq(self,widget):
         nome_maq= self.entmaq.get_chars(0,-1)
@@ -211,40 +255,89 @@ class progm(object):
         pass
 
     def del_func(self,widget):
-        pass
+        del_fun=self.dec_func.get_chars(0,-1)
+        conectar = sqlite3.connect("dadosfunc.db")
+        cur= conectar.cursor()
+        sql = """DELETE FROM dadosfunc WHERE nome = '"""+str(del_fun.decode("latin1"))+"""'"""
+        cur.execute(sql)
+        conectar.commit()
+        self.dec_func.set_text("")
 
     def con_func(self,widget):
-        pass
+        con_fun=self.dec_func.get_chars(0,-1)
+        conectar = sqlite3.connect("dadosfunc.db")
+        cur= conectar.cursor()
+        sql = """SELECT * FROM dadosfunc WHERE nome = '"""+str(con_fun.decode("latin1"))+"""'"""
+        cur.execute(sql)
+        label_n=label_carg=label_name=cur.fetchone()
+        self.label_name_func.set_text(str(label_name[0]))
+
+        self.label_carg_func.set_text(str(label_carg[1]))
+
+        self.label_n_func.set_text(str(label_n[2]))
+
+        conectar.commit()
+        self.dec_func.set_text("")
+
 
     def del_maq(self,widget):
-        pass
+        del_mac=self.dec_maq.get_chars(0,-1)
+        conectar = sqlite3.connect("dadosfunc.db")
+        cur= conectar.cursor()
+        sql = """DELETE FROM dadosmaq WHERE nome = '"""+str(del_mac.decode("latin1"))+"""'"""
+        cur.execute(sql)
+        conectar.commit()
+        self.dec_maq.set_text("")
 
     def con_maq(self,widget):
-        pass
+        con_maq=self.dec_maq.get_chars(0,-1)
+        conectar = sqlite3.connect("dadosfunc.db")
+        cur= conectar.cursor()
+        sql = """SELECT * FROM dadosmaq WHERE nome = '"""+str(con_maq.decode("latin1"))+"""'"""
+        cur.execute(sql)
+        label_n =label_func =label_name =cur.fetchone()
+        self.label_name_maq.set_text(str(label_name[0]))
+
+        self.label_func_maq.set_text(str(label_func[1]))
+
+        self.label_n_maq.set_text(str(label_n[2]))
+
+        conectar.commit()
+        self.dec_maq.set_text("")
 
     def atu_func(self,widget):
         pass
 
-    def add_bruto(self,widget):
-        pass
-
-    def add_despesa(self,widget):
-        pass
 
     def atum_func(self,widget):
         self.window10.show_all()
+        self.atu_func_pesq.set_text("")
+        self.atu_func_cargo.set_text("")
 
     def dec_func(self,widget):
         self.window8.show_all()
+        self.label_name_func.set_text("")
+        self.label_carg_func.set_text("")
+        self.label_n_func.set_text("")
+        self.dec_func.set_text("")
 
     def dec_mqna(self,widget):
         self.window9.show_all()
+        self.label_func_maq.set_text("")
+        self.label_name_maq.set_text("")
+        self.label_n_maq.set_text("")
+        self.dec_maq.set_text("")
 
     def valor_bruto(self,widget):
         self.window11.show_all()
+        self.valor_bruto_valor.set_text("")
+        self.valor_bruto_mes.set_text("")
 
     def despesas(self,widget):
         self.window12.show_all()
+        self.desp_valor.set_text("")
+        self.desp_mes.set_text("")
+
 
     def func (self,widget,):
         self.window2.show_all()
@@ -296,9 +389,15 @@ class progm(object):
 
     def cad_func (self,widget,):
         self.window6.show_all()
+        self.entfunc.set_text("")
+        self.entfunc2.set_text("")
+        self.entfunc3.set_text("")
 
     def cad_mqna (self,widget,):
         self.window7.show_all()
+        self.entmaq.set_text("")
+        self.entmaq2.set_text("")
+        self.entmaq3.set_text("")
 
 p=progm()
 gtk.main()
