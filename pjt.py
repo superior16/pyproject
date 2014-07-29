@@ -12,15 +12,16 @@ class progm(object):
 
 
     def __init__(self):
-
+        queryCriar = """CREATE TABLE IF NOT EXISTS dadosfunc (nome text, cargo text, numero_carteira text)"""
         self.conectar = sqlite3.connect("dadosfunc.db")
         self.cur= self.conectar.cursor()
-        self.cur.execute("CREATE TABLE IF NOT EXISTS dadosfunc(nome TEXT, cargo TEXT ,carteira TEXT)")
+        self.cur.execute(queryCriar)
         self.conectar.commit()
 
-        self.conectar = sqlite3.connect("dadosmaq.db")
+        queryCriar = """CREATE TABLE IF NOT EXISTS dadosmaq (nome text, funcao text, numero_maquina text)"""
+        self.conectar = sqlite3.connect("dadosfunc.db")
         self.cur= self.conectar.cursor()
-        self.cur.execute("CREATE TABLE IF NOT EXISTS dadosmaq( TEXT)")
+        self.cur.execute(queryCriar)
         self.conectar.commit()
 
         builder= gtk.Builder()
@@ -87,10 +88,13 @@ class progm(object):
 
     def ent_func (self,widget):
         nome_func= self.entfunc.get_chars(0,-1)
-        cargo_func= self.entfunc.get_chars(0,-1)
-        n_c_t_func= self.entfunc.get_chars(0,-1)
-        self.cur.execute('INSERT INTO self.dadosfunc VALUES(?,?,?)',(nome_func.decode("latin1"),cargo_func.decode("latin1"),n_c_t_func.decode("latin1")))
+        cargo_func= self.entfunc2.get_chars(0,-1)
+        n_c_t_func= self.entfunc3.get_chars(0,-1)
+        conectar = sqlite3.connect("dadosfunc.db")
+        cur= conectar.cursor()
+        cur.execute('INSERT INTO dadosfunc VALUES(?,?,?)',(nome_func.decode("latin1"),cargo_func.decode("latin1"),n_c_t_func.decode("latin1")))
         conectar.commit()
+        self.window6.hide_all()
 
     def func (self,widget,):
         self.window2.show_all()
@@ -117,6 +121,9 @@ class progm(object):
         self.window5.hide_all()
 
     def hide_event5(self,widget,):
+        self.entfunc.set_text("")
+        self.entfunc2.set_text("")
+        self.entfunc3.set_text("")
         self.window6.hide_all()
 
     def hide_event6(self,widget,):
