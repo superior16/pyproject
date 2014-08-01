@@ -429,6 +429,7 @@ class progm(object):
     """def atum_func(self,widget):
         self.window10.show_all()
         self.atu_func_pesq.set_text("")
+<<<<<<< HEAD
         self.atu_func_cargo.set_text("")"""
 
     def dec_func(self,widget):
@@ -436,13 +437,22 @@ class progm(object):
         self.label_name_func.set_text("")
         self.label_carg_func.set_text("")
         self.label_n_func.set_text("")
+=======
+        self.atu_func_cargo.set_text("")
+
+    def dec_func(self,widget):
+        self.window8.show_all()
+>>>>>>> 5c8b09f68c09a2c13f372c891daed30c3600948a
         self.dec_func.set_text("")
 
     def dec_mqna(self,widget):
         self.window9.show_all()
+<<<<<<< HEAD
         self.label_func_maq.set_text("")
         self.label_name_maq.set_text("")
         self.label_n_maq.set_text("")
+=======
+>>>>>>> 5c8b09f68c09a2c13f372c891daed30c3600948a
         self.dec_maq.set_text("")
 
     def valor_bruto(self,widget):
@@ -515,7 +525,10 @@ class progm(object):
         self.entmaq.set_text("")
         self.entmaq2.set_text("")
         self.entmaq3.set_text("")
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5c8b09f68c09a2c13f372c891daed30c3600948a
 
 p=progm()
 
