@@ -3,6 +3,12 @@ import pygtk
 pygtk.require('2.0')
 import gtk
 import sqlite3
+import numpy as np
+import scipy.stats as spst
+import scipy.optimize as spop
+import scipy.interpolate as spint
+import pylab
+import scipy
 
 
 
@@ -35,6 +41,14 @@ class progm(object):
         self.conectar = sqlite3.connect("dadosfunc.db")
         self.cur= self.conectar.cursor()
         self.cur.execute(queryCriar4)
+        self.conectar.commit()
+
+        queryCriar5 = """CREATE TABLE IF NOT EXISTS dadoscont (nome text, numero text)"""
+        self.conectar = sqlite3.connect("dadosfunc.db")
+        self.cura= self.conectar.cursor()
+        self.cura.execute(queryCriar5)
+        self.cura.execute('INSERT INTO dadoscont VALUES(?,?)',('a','0'))
+        self.cura.execute('INSERT INTO dadoscont VALUES(?,?)',('b','0'))
         self.conectar.commit()
 
         builder= gtk.Builder()
@@ -75,7 +89,7 @@ class progm(object):
         self.but6.connect("clicked",self.cad_func,)
 
         self.but7= builder.get_object("button7")
-        self.but7.connect("clicked",self.atum_func,)
+        self.but7.connect("clicked",self.atu_func,)
 
         self.but8= builder.get_object("button8")
         self.but8.connect("clicked",self.dec_func,)
@@ -143,11 +157,11 @@ class progm(object):
         self.but29= builder.get_object("button29")
         self.but29.connect("clicked",self.hide_event8,)
 
-        self.but30= builder.get_object("button30")
-        self.but30.connect("clicked",self.atu_func,)
+        """self.but30= builder.get_object("button30")
+        self.but30.connect("clicked",self.atu_func,)"""
 
         self.but31= builder.get_object("button31")
-        self.but31.connect("clicked",self.hide_event9,)
+        """self.but31.connect("clicked",self.hide_event9,)"""
 
         self.but32= builder.get_object("button32")
         self.but32.connect("clicked",self.add_bruto,)
@@ -170,11 +184,12 @@ class progm(object):
         self.dec_func= builder.get_object("entry7")
         self.dec_maq= builder.get_object("entry8")
         self.atu_func_pesq= builder.get_object("entry9")
-        self.atu_func_cargo= builder.get_object("entry10")
+        """self.atu_func_cargo= builder.get_object("entry10")"""
         self.valor_bruto_valor= builder.get_object("entry11")
         self.valor_bruto_mes= builder.get_object("entry12")
         self.desp_valor= builder.get_object("entry13")
         self.desp_mes= builder.get_object("entry14")
+
 
         self.label_name_func= builder.get_object("label17")
         self.label_carg_func= builder.get_object("label18")
@@ -199,17 +214,81 @@ class progm(object):
         valor_bruto_mes= self.valor_bruto_mes.get_chars(0,-1)
         conectar = sqlite3.connect("dadosfunc.db")
         cur= conectar.cursor()
-        cur.execute('INSERT INTO dadosbruto VALUES(?,?)',(valor_bruto.decode("latin1"),valor_bruto_mes.decode("latin1")))
+        sql2="""SELECT * FROM dadoscont WHERE nome = 'a'"""
+        cur.execute(sql2)
+        quasea= cur.fetchone()
+        a=int(quasea[1])
+
+        if a==0:
+            cur.execute("INSERT INTO dadosbruto VALUES(?,?)",('0','Janeiro'))
+            cur.execute("INSERT INTO dadosbruto VALUES(?,?)",('0','Fevereiro'))
+            cur.execute("INSERT INTO dadosbruto VALUES(?,?)",('0','Marco'))
+            cur.execute("INSERT INTO dadosbruto VALUES(?,?)",('0','Abril'))
+            cur.execute("INSERT INTO dadosbruto VALUES(?,?)",('0','Maio'))
+            cur.execute("INSERT INTO dadosbruto VALUES(?,?)",('0','Junho'))
+            cur.execute("INSERT INTO dadosbruto VALUES(?,?)",('0','Julho'))
+            cur.execute("INSERT INTO dadosbruto VALUES(?,?)",('0','Agosto'))
+            cur.execute("INSERT INTO dadosbruto VALUES(?,?)",('0','Setembro'))
+            cur.execute("INSERT INTO dadosbruto VALUES(?,?)",('0','Outubro'))
+            cur.execute("INSERT INTO dadosbruto VALUES(?,?)",('0','Novembro'))
+            cur.execute("INSERT INTO dadosbruto VALUES(?,?)",('0','Dezembro'))
+
+
+
+
+        sql2="""UPDATE dadoscont SET numero='1'WHERE nome='a'"""
+        cur.execute(sql2)
+
+
+        valor_bruto=float(valor_bruto.decode("latin1"))
+        sql = """SELECT * FROM dadosbruto WHERE mes = '"""+str(valor_bruto_mes.decode("latin1"))+"""'"""
+        cur.execute(sql)
+        valor_anterior= cur.fetchone()
+        valor_bruto+= float(valor_anterior[0])
+        valor_bruto=str(valor_bruto)
+        cur.execute("""UPDATE dadosbruto SET valor= '"""+str(valor_bruto)+"""'WHERE mes='"""+str(valor_anterior[1].decode("latin1"))+"""'""")
         conectar.commit()
         self.valor_bruto_mes.set_text("")
         self.valor_bruto_valor.set_text("")
 
     def add_despesas (self,widget):
-        valor_despesas= self.desp_valor.get_chars(0,-1)
-        valor_despesas_mes= self.desp_mes.get_chars(0,-1)
+        valor_despesa= self.desp_valor.get_chars(0,-1)
+        valor_despesa_mes= self.desp_mes.get_chars(0,-1)
         conectar = sqlite3.connect("dadosfunc.db")
         cur= conectar.cursor()
-        cur.execute('INSERT INTO dadosdesp VALUES(?,?)',(valor_despesas.decode("latin1"),valor_despesas_mes.decode("latin1")))
+        sql2="""SELECT * FROM dadoscont WHERE nome = 'b'"""
+        cur.execute(sql2)
+        quaseb= cur.fetchone()
+        b=int(quaseb[1])
+
+        if b==0:
+            cur.execute("INSERT INTO dadosdesp VALUES(?,?)",('0','Janeiro'))
+            cur.execute("INSERT INTO dadosdesp VALUES(?,?)",('0','Fevereiro'))
+            cur.execute("INSERT INTO dadosdesp VALUES(?,?)",('0','Marco'))
+            cur.execute("INSERT INTO dadosdesp VALUES(?,?)",('0','Abril'))
+            cur.execute("INSERT INTO dadosdesp VALUES(?,?)",('0','Maio'))
+            cur.execute("INSERT INTO dadosdesp VALUES(?,?)",('0','Junho'))
+            cur.execute("INSERT INTO dadosdesp VALUES(?,?)",('0','Julho'))
+            cur.execute("INSERT INTO dadosdesp VALUES(?,?)",('0','Agosto'))
+            cur.execute("INSERT INTO dadosdesp VALUES(?,?)",('0','Setembro'))
+            cur.execute("INSERT INTO dadosdesp VALUES(?,?)",('0','Outubro'))
+            cur.execute("INSERT INTO dadosdesp VALUES(?,?)",('0','Novembro'))
+            cur.execute("INSERT INTO dadosdesp VALUES(?,?)",('0','Dezembro'))
+
+
+
+
+        sql2="""UPDATE dadoscont SET numero='1'WHERE nome='b'"""
+        cur.execute(sql2)
+
+
+        valor_despesa=float(valor_despesa.decode("latin1"))
+        sql = """SELECT * FROM dadosdesp WHERE mes = '"""+str(valor_despesa_mes.decode("latin1"))+"""'"""
+        cur.execute(sql)
+        valor_anterior= cur.fetchone()
+        valor_despesa+= float(valor_anterior[0])
+        valor_despesa=str(valor_despesa)
+        cur.execute("""UPDATE dadosdesp SET valor= '"""+str(valor_despesa)+"""'WHERE mes='"""+str(valor_anterior[1].decode("latin1"))+"""'""")
         conectar.commit()
         self.desp_mes.set_text("")
         self.desp_valor.set_text("")
@@ -252,7 +331,37 @@ class progm(object):
         self.entfunc3.set_text("")
 
     def gra_prod(self,widget):
-        pass
+        mes=['Janeiro','Fevereiro','Marco','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro',]
+        conectar = sqlite3.connect("dadosfunc.db")
+        cur= conectar.cursor()
+        lista_eixo_valor=[0]
+        lista_eixo_meses =[0]
+        lista_eixo_despesa =[0]
+        lista_eixo_lucro =[0]
+        i =0
+        while i<12:
+            sql = """SELECT * FROM dadosbruto WHERE mes = '"""+mes[i]+"""'"""
+            cur.execute(sql)
+            eixo_valor =cur.fetchone()
+            lista_eixo_meses.append((1+i))
+            lista_eixo_valor.append(float(eixo_valor[0]))
+            sql = """SELECT * FROM dadosdesp WHERE mes = '"""+mes[i]+"""'"""
+            cur.execute(sql)
+            eixo_desp =cur.fetchone()
+            lista_eixo_despesa.append(float(eixo_desp[0]))
+            lista_eixo_lucro.append(float(lista_eixo_valor[i]) - float(lista_eixo_despesa[i]))
+            i+=1
+
+        pylab.plot (lista_eixo_meses,lista_eixo_lucro, color = "green", label = 'F=Lucro')
+        pylab.plot (lista_eixo_meses,lista_eixo_valor, color = "black", label = 'F=Valor Bruto')
+        pylab.plot (lista_eixo_meses,lista_eixo_despesa, color = "red", label = 'F=Despesas')
+        pylab.title ('Grafico de lucro')
+        pylab.xlabel ('mes')
+        pylab.legend (loc = 'upper left')
+        pylab.ylabel ('Valor em R$')
+        pylab.grid (True)
+        pylab.show()
+
 
     def del_func(self,widget):
         del_fun=self.dec_func.get_chars(0,-1)
@@ -269,10 +378,10 @@ class progm(object):
         cur= conectar.cursor()
         sql = """SELECT * FROM dadosfunc WHERE nome = '"""+str(con_fun.decode("latin1"))+"""'"""
         cur.execute(sql)
-        label_n=label_carg=label_name=cur.fetchone()
+        label_n=self.label_carg=label_name=cur.fetchone()
         self.label_name_func.set_text(str(label_name[0]))
 
-        self.label_carg_func.set_text(str(label_carg[1]))
+        self.label_carg_func.set_text(str(self.label_carg[1]))
 
         self.label_n_func.set_text(str(label_n[2]))
 
@@ -306,13 +415,21 @@ class progm(object):
         self.dec_maq.set_text("")
 
     def atu_func(self,widget):
-        pass
+
+        atu_fun =self.atu_func_pesq.get_chars(0,-1)
+        conectar = sqlite3.connect("dadosfunc.db")
+        cur= conectar.cursor()
+        sql = """UPDATE dadosfunc SET cargo = '"""+str(atu_fun.decode("latin1"))+"""'WHERE cargo ='"""+str(self.label_carg[1])+"""'"""
+        cur.execute(sql)
+        conectar.commit()
+        self.atu_func_pesq.set_text("")
 
 
-    def atum_func(self,widget):
+
+    """def atum_func(self,widget):
         self.window10.show_all()
         self.atu_func_pesq.set_text("")
-        self.atu_func_cargo.set_text("")
+        self.atu_func_cargo.set_text("")"""
 
     def dec_func(self,widget):
         self.window8.show_all()
@@ -399,5 +516,7 @@ class progm(object):
         self.entmaq2.set_text("")
         self.entmaq3.set_text("")
 
+
 p=progm()
+
 gtk.main()
