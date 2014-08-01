@@ -9,15 +9,22 @@ import scipy.optimize as spop
 import scipy.interpolate as spint
 import pylab
 import scipy
+import pydoc
 
 
 
 
 
 class progm(object):
+    """
+    Programa serve para calcular o lucro das empresas!
+    """
 
 
     def __init__(self):
+        """
+        Método inicilizador
+        """
         queryCriar = """CREATE TABLE IF NOT EXISTS dadosfunc (nome text, cargo text, numero_carteira text)"""
         self.conectar = sqlite3.connect("dadosfunc.db")
         self.cur= self.conectar.cursor()
@@ -307,6 +314,10 @@ class progm(object):
         self.window7.hide_all()
 
     def save_cn_maq(self,widget):
+        '''
+
+        '''
+
         nome_maq= self.entmaq.get_chars(0,-1)
         funcao_maq= self.entmaq2.get_chars(0,-1)
         n_m_maq= self.entmaq3.get_chars(0,-1)
@@ -319,9 +330,12 @@ class progm(object):
         self.entmaq3.set_text("")
 
     def save_cn_func(self,widget):
-        nome_func= self.entfunc.get_chars(0,-1)
-        cargo_func= self.entfunc2.get_chars(0,-1)
-        n_c_t_func= self.entfunc3.get_chars(0,-1)
+        '''
+
+        '''
+        nome_func = self.entfunc.get_chars(0,-1)
+        cargo_func = self.entfunc2.get_chars(0,-1)
+        n_c_t_func = self.entfunc3.get_chars(0,-1)
         conectar = sqlite3.connect("dadosfunc.db")
         cur= conectar.cursor()
         cur.execute('INSERT INTO dadosfunc VALUES(?,?,?)',(nome_func.decode("latin1"),cargo_func.decode("latin1"),n_c_t_func.decode("latin1")))
@@ -331,19 +345,23 @@ class progm(object):
         self.entfunc3.set_text("")
 
     def gra_prod(self,widget):
-        mes=['Janeiro','Fevereiro','Marco','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro',]
+        '''
+        Gerador de gráfico.
+        '''
+
+        mes=[0,'Janeiro','Fevereiro','Marco','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro',]
         conectar = sqlite3.connect("dadosfunc.db")
         cur= conectar.cursor()
         lista_eixo_valor=[0]
         lista_eixo_meses =[0]
         lista_eixo_despesa =[0]
         lista_eixo_lucro =[0]
-        i =0
-        while i<12:
+        i =1
+        while i<13:
             sql = """SELECT * FROM dadosbruto WHERE mes = '"""+mes[i]+"""'"""
             cur.execute(sql)
             eixo_valor =cur.fetchone()
-            lista_eixo_meses.append((1+i))
+            lista_eixo_meses.append((i))
             lista_eixo_valor.append(float(eixo_valor[0]))
             sql = """SELECT * FROM dadosdesp WHERE mes = '"""+mes[i]+"""'"""
             cur.execute(sql)
@@ -353,7 +371,7 @@ class progm(object):
             i+=1
 
         pylab.plot (lista_eixo_meses,lista_eixo_lucro, color = "green", label = 'F=Lucro')
-        pylab.plot (lista_eixo_meses,lista_eixo_valor, color = "black", label = 'F=Valor Bruto')
+        pylab.plot (lista_eixo_meses,lista_eixo_valor, color = "yellow", label = 'F=Valor Bruto')
         pylab.plot (lista_eixo_meses,lista_eixo_despesa, color = "red", label = 'F=Despesas')
         pylab.title ('Grafico de lucro')
         pylab.xlabel ('mes')
@@ -437,22 +455,22 @@ class progm(object):
         self.label_name_func.set_text("")
         self.label_carg_func.set_text("")
         self.label_n_func.set_text("")
-=======
+#=======
         self.atu_func_cargo.set_text("")
 
     def dec_func(self,widget):
         self.window8.show_all()
->>>>>>> 5c8b09f68c09a2c13f372c891daed30c3600948a
+#>>>>>>> 5c8b09f68c09a2c13f372c891daed30c3600948a
         self.dec_func.set_text("")
 
     def dec_mqna(self,widget):
         self.window9.show_all()
-<<<<<<< HEAD
+#<<<<<<< HEAD
         self.label_func_maq.set_text("")
         self.label_name_maq.set_text("")
         self.label_n_maq.set_text("")
-=======
->>>>>>> 5c8b09f68c09a2c13f372c891daed30c3600948a
+#=======
+#>>>>>>> 5c8b09f68c09a2c13f372c891daed30c3600948a
         self.dec_maq.set_text("")
 
     def valor_bruto(self,widget):
@@ -525,11 +543,12 @@ class progm(object):
         self.entmaq.set_text("")
         self.entmaq2.set_text("")
         self.entmaq3.set_text("")
+"""
 <<<<<<< HEAD
 
 =======
 >>>>>>> 5c8b09f68c09a2c13f372c891daed30c3600948a
-
+"""
 p=progm()
 
 gtk.main()
