@@ -207,6 +207,11 @@ class progm(object):
 
 
     def ent_func (self,widget):
+
+        """
+        Cria funcionário.
+        """
+
         nome_func= self.entfunc.get_chars(0,-1)
         cargo_func= self.entfunc2.get_chars(0,-1)
         n_c_t_func= self.entfunc3.get_chars(0,-1)
@@ -217,6 +222,11 @@ class progm(object):
         self.window6.hide_all()
 
     def add_bruto (self,widget):
+
+        '''
+        Adiciona valor bruto à algum mês.
+        '''
+
         valor_bruto= self.valor_bruto_valor.get_chars(0,-1)
         valor_bruto_mes= self.valor_bruto_mes.get_chars(0,-1)
         conectar = sqlite3.connect("dadosfunc.db")
@@ -259,6 +269,11 @@ class progm(object):
         self.valor_bruto_valor.set_text("")
 
     def add_despesas (self,widget):
+
+        '''
+        Adiciona as despesas do mês.
+        '''
+
         valor_despesa= self.desp_valor.get_chars(0,-1)
         valor_despesa_mes= self.desp_mes.get_chars(0,-1)
         conectar = sqlite3.connect("dadosfunc.db")
@@ -304,6 +319,11 @@ class progm(object):
 
 
     def ent_maq(self,widget):
+
+        '''
+        Cadastra uma máquina.
+        '''
+
         nome_maq= self.entmaq.get_chars(0,-1)
         funcao_maq= self.entmaq2.get_chars(0,-1)
         n_m_maq= self.entmaq3.get_chars(0,-1)
@@ -315,7 +335,7 @@ class progm(object):
 
     def save_cn_maq(self,widget):
         '''
-
+        Salva e cadastra nova máquina.
         '''
 
         nome_maq= self.entmaq.get_chars(0,-1)
@@ -331,7 +351,7 @@ class progm(object):
 
     def save_cn_func(self,widget):
         '''
-
+        Salva e cadastra novo funcionário.
         '''
         nome_func = self.entfunc.get_chars(0,-1)
         cargo_func = self.entfunc2.get_chars(0,-1)
@@ -382,6 +402,11 @@ class progm(object):
 
 
     def del_func(self,widget):
+
+        '''
+        Deleta funcionário
+        '''
+
         del_fun=self.dec_func.get_chars(0,-1)
         conectar = sqlite3.connect("dadosfunc.db")
         cur= conectar.cursor()
@@ -391,6 +416,11 @@ class progm(object):
         self.dec_func.set_text("")
 
     def con_func(self,widget):
+
+        '''
+        Consultar funcionário.
+        '''
+
         con_fun=self.dec_func.get_chars(0,-1)
         conectar = sqlite3.connect("dadosfunc.db")
         cur= conectar.cursor()
@@ -408,6 +438,11 @@ class progm(object):
 
 
     def del_maq(self,widget):
+
+        '''
+        Deleta maquinário criado.
+        '''
+
         del_mac=self.dec_maq.get_chars(0,-1)
         conectar = sqlite3.connect("dadosfunc.db")
         cur= conectar.cursor()
@@ -417,6 +452,11 @@ class progm(object):
         self.dec_maq.set_text("")
 
     def con_maq(self,widget):
+
+        '''
+        Consultar máquina.
+        '''
+
         con_maq=self.dec_maq.get_chars(0,-1)
         conectar = sqlite3.connect("dadosfunc.db")
         cur= conectar.cursor()
@@ -434,6 +474,10 @@ class progm(object):
 
     def atu_func(self,widget):
 
+        '''
+        Atualiza cargo do funcionário.
+        '''
+
         atu_fun =self.atu_func_pesq.get_chars(0,-1)
         conectar = sqlite3.connect("dadosfunc.db")
         cur= conectar.cursor()
@@ -444,111 +488,213 @@ class progm(object):
 
 
 
-    """def atum_func(self,widget):
+    def atum_func(self,widget):
         self.window10.show_all()
         self.atu_func_pesq.set_text("")
-<<<<<<< HEAD
-        self.atu_func_cargo.set_text("")"""
+
+        self.atu_func_cargo.set_text("")
 
     def dec_func(self,widget):
+
+        '''
+        Abre a janela de deletar, consultar e adicionar funcionário.
+        '''
+
         self.window8.show_all()
         self.label_name_func.set_text("")
         self.label_carg_func.set_text("")
         self.label_n_func.set_text("")
-#=======
-        self.atu_func_cargo.set_text("")
 
-    def dec_func(self,widget):
-        self.window8.show_all()
-#>>>>>>> 5c8b09f68c09a2c13f372c891daed30c3600948a
-        self.dec_func.set_text("")
+        """self.atu_func_cargo.set_text("")"""
 
     def dec_mqna(self,widget):
+
+        '''
+        Abre a janela de deletar, consultar e adicionar maquinário.
+        '''
+
         self.window9.show_all()
-#<<<<<<< HEAD
+
         self.label_func_maq.set_text("")
         self.label_name_maq.set_text("")
         self.label_n_maq.set_text("")
-#=======
-#>>>>>>> 5c8b09f68c09a2c13f372c891daed30c3600948a
+
         self.dec_maq.set_text("")
 
     def valor_bruto(self,widget):
+
+        '''
+        Abre a janela do valor bruto.
+        '''
+
         self.window11.show_all()
         self.valor_bruto_valor.set_text("")
         self.valor_bruto_mes.set_text("")
 
     def despesas(self,widget):
+
+        '''
+        Abre a janela do valor despesas.
+        '''
+
         self.window12.show_all()
         self.desp_valor.set_text("")
         self.desp_mes.set_text("")
 
 
     def func (self,widget,):
+
+        '''
+        Abre a menu de funcionários.
+        '''
+
         self.window2.show_all()
 
     def mqna (self,widget,):
+
+        '''
+        Abre a menu de maquinário.
+        '''
+
         self.window3.show_all()
 
     def cpta (self,widget,):
+
+        '''
+        Abre a menu de capital.
+        '''
+
         self.window4.show_all()
 
     def gfco (self,widget,):
+
+        '''
+        Abre a menu de gráficos.
+        '''
+
         self.window5.show_all()
 
     def hide_event(self,widget,):
+
+        '''
+        Fecha menu de funcionários.
+        '''
+
         self.window2.hide_all()
 
     def hide_event2(self,widget,):
+
+        '''
+        Fecha menu de maquinário.
+        '''
+
         self.window3.hide_all()
 
     def hide_event3(self,widget,):
+
+        '''
+        Fecha menu de capital.
+        '''
+
         self.window4.hide_all()
 
     def hide_event4(self,widget,):
+
+        '''
+        Fecha menu de gráficos.
+        '''
+
         self.window5.hide_all()
 
     def hide_event5(self,widget,):
+
+        '''
+        Fecha menu de cadastro de funcionários.
+        '''
+
         self.window6.hide_all()
 
     def hide_event6(self,widget,):
+
+        '''
+        Fecha menu de cadastro de maquinário.
+        '''
+
         self.window7.hide_all()
 
     def hide_event7(self,widget,):
+
+        '''
+        Fecha a janela de deletar, consultar e adicionar funcionário.
+        '''
+
         self.window8.hide_all()
 
     def hide_event8(self,widget,):
+
+        '''
+        Fechar a janela de deletar, consultar e adicionar maquinário.
+        '''
+
         self.window9.hide_all()
 
-    def hide_event9(self,widget,):
-        self.window10.hide_all()
+    '''def hide_event9(self,widget,):
+
+        ''
+        foi deletado
+        ''
+
+        self.window10.hide_all()'''
 
     def hide_event10(self,widget,):
+
+        '''
+        Fecha a janela de valor bruto.
+        '''
+
         self.window11.hide_all()
 
     def hide_event11(self,widget,):
+
+        '''
+        Fecha a janela de despesas.
+        '''
+
         self.window12.hide_all()
 
     def delete_event2(self,widget,):
+
+        '''
+        Fecha tudo.
+        '''
+
         gtk.main_quit()
 
     def cad_func (self,widget,):
+
+        '''
+        Abre o cadastro de funcionários.
+        '''
+
         self.window6.show_all()
         self.entfunc.set_text("")
         self.entfunc2.set_text("")
         self.entfunc3.set_text("")
 
     def cad_mqna (self,widget,):
+
+        '''
+        Abre o cadastro de maquinário.
+        '''
+
         self.window7.show_all()
         self.entmaq.set_text("")
         self.entmaq2.set_text("")
         self.entmaq3.set_text("")
-"""
-<<<<<<< HEAD
 
-=======
->>>>>>> 5c8b09f68c09a2c13f372c891daed30c3600948a
-"""
+
+
+
 p=progm()
 
 gtk.main()
